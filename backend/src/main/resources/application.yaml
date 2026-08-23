@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: course-management
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/course_management
+    username: postgres
+    password: Shahriarison
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+
