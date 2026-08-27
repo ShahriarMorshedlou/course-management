@@ -2,29 +2,31 @@ package com.shah.course_management.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
-@Table (name = "courses")
+@Table(name = "courses")
+@NoArgsConstructor
 public class Course {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String code;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private LocalDate startDate;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private LocalDate endDate;
 
     @ManyToOne
@@ -38,6 +40,12 @@ public class Course {
     )
     private List<Student> students;
 
+    public Course(String code, String title, LocalDate startDate, LocalDate endDate) {
+        this.code = code;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     public void setTitle(String title) {
         this.title = title;
