@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = CourseDatesValidator.class )
+@Constraint(validatedBy = CourseDatesValidator.class)
 public @interface ValidCourseDates {
 
     String message() default "End date must be after start date";

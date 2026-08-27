@@ -6,6 +6,9 @@ import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CourseService {
 
@@ -36,4 +39,23 @@ public class CourseService {
         );
         return courseResponse;
     }
+
+    public List<CourseResponse> getAllCourses() {
+
+        List<Course> courses = courseRepository.findAll();
+
+        List<CourseResponse> courseResponses = courses.stream()
+                .map(course -> new CourseResponse(
+                        course.getId(),
+                        course.getTitle(),
+                        course.getCode(),
+                        course.getStartDate(),
+                        course.getEndDate()
+
+                )).toList();
+
+        return courseResponses;
+    }
+
+
 }

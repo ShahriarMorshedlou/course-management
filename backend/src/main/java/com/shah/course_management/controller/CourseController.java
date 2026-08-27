@@ -4,10 +4,9 @@ import com.shah.course_management.dto.request.CreateCourseRequest;
 import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.service.CourseService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -25,5 +24,11 @@ public class CourseController {
     public CourseResponse createCourseResponse(@Valid @RequestBody CreateCourseRequest request) {
         return courseService.createCourse(request);
     }
+
+    @GetMapping
+    public List<CourseResponse> getAllCourses(){
+        return courseService.getAllCourses();
+    }
+
 
 }
