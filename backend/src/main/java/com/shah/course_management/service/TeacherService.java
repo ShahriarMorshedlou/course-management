@@ -1,4 +1,40 @@
 package com.shah.course_management.service;
 
+import com.shah.course_management.domain.Teacher;
+import com.shah.course_management.dto.request.TeacherRequest;
+import com.shah.course_management.dto.response.TeacherResponse;
+import com.shah.course_management.repository.TeacherRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+@Service
 public class TeacherService {
+
+    private final TeacherRepository teacherRepository;
+
+    public TeacherService(TeacherRepository teacherRepository) {
+        this.teacherRepository = teacherRepository;
+    }
+
+    @Transactional
+    public TeacherResponse createTeacher(TeacherRequest teacherRequest) {
+
+        Teacher teacher = new Teacher(
+                teacherRequest.getFirstName(),
+                teacherRequest.getLastName(),
+                teacherRequest.getEmail(),
+                teacherRequest.getSpecialty()
+
+        );
+
+        teacherRepository.save(teacher);
+
+         return new TeacherResponse(
+                teacher.getFirstName(),
+                teacher.getLastName(),
+                teacher.getEmail(),
+                teacher.getSpecialty()
+        );
+
+    }
 }
