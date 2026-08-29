@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/teacher")
@@ -28,13 +30,21 @@ public class TeacherController {
     @PostMapping
     public ResponseEntity<TeacherResponse> createTeacher(
             @RequestBody @Valid TeacherRequest teacherRequest
-            ){
+    ) {
 
-       TeacherResponse teacherResponse = teacherService.createTeacher(teacherRequest);
+        TeacherResponse teacherResponse = teacherService.createTeacher(teacherRequest);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(teacherResponse);
 
+    }
+
+
+    public ResponseEntity<List<TeacherResponse>> getAllTeachers()  {
+        List<TeacherResponse> teacherResponse = teacherService.getAllTeachers() ;
+
+        return ResponseEntity
+                .ok(teacherResponse);
     }
 }

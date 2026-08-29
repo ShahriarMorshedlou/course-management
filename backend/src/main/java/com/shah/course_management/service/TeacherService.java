@@ -7,6 +7,9 @@ import com.shah.course_management.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class TeacherService {
 
@@ -29,12 +32,25 @@ public class TeacherService {
 
         teacherRepository.save(teacher);
 
-         return new TeacherResponse(
+        return new TeacherResponse(
                 teacher.getFirstName(),
                 teacher.getLastName(),
                 teacher.getEmail(),
                 teacher.getSpecialty()
         );
+    }
+
+    public List<TeacherResponse> getAllTeachers()  {
+
+
+        return teacherRepository.findAll()
+                .stream()
+                .map(teacher -> new TeacherResponse(
+                        teacher.getFirstName(),
+                        teacher.getLastName(),
+                        teacher.getEmail(),
+                        teacher.getSpecialty()
+                )).toList();
 
     }
 }
