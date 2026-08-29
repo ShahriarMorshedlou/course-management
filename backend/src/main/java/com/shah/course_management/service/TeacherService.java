@@ -66,6 +66,13 @@ public class TeacherService {
                 teacher.getSpecialty()
 
         );
+    }
 
+    public void deleteTeacherById(Long id) {
+
+        if (!teacherRepository.existsById(id)) {
+            throw new TeacherNotFoundException("Teacher Not Found With Id: " + id);
+        }
+        teacherRepository.deleteById(id);
     }
 }
