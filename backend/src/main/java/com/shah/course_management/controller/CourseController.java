@@ -1,9 +1,11 @@
 package com.shah.course_management.controller;
 
 import com.shah.course_management.dto.request.CreateCourseRequest;
+import com.shah.course_management.dto.request.UpdateCourseRequest;
 import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.service.CourseService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +64,16 @@ public class CourseController {
         return ResponseEntity
                 .noContent()
                 .build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CourseResponse> updateCourse(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid UpdateCourseRequest updateCourseRequest) {
+        CourseResponse courseResponse = courseService.updateCourse(id, updateCourseRequest);
+
+        return ResponseEntity
+                .ok(courseResponse);
     }
 
 }

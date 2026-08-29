@@ -2,14 +2,14 @@ package com.shah.course_management.service;
 
 import com.shah.course_management.domain.Course;
 import com.shah.course_management.dto.request.CreateCourseRequest;
+import com.shah.course_management.dto.request.UpdateCourseRequest;
 import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.exception.CourseNotFoundException;
 import com.shah.course_management.repository.CourseRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CourseService {
@@ -20,6 +20,7 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
+    @Transactional
     public CourseResponse createCourse(CreateCourseRequest request) {
 
         Course course = new Course(
@@ -62,7 +63,7 @@ public class CourseService {
     public CourseResponse getCourseById(Long id) {
 
         Course course = courseRepository.findById(id)
-                .orElseThrow( () -> new CourseNotFoundException("Course not found with id: " + id));
+                .orElseThrow(() -> new CourseNotFoundException("Course not found with id: " + id));
 
         CourseResponse courseResponse = new CourseResponse(
                 course.getId(),
@@ -70,16 +71,42 @@ public class CourseService {
                 course.getCode(),
                 course.getStartDate(),
                 course.getEndDate()
-        ); return courseResponse;
+        );
+        return courseResponse;
     }
 
-    public void deleteCourseById(Long id){
+    @Transactional
+    public void deleteCourseById(Long id) {
 
-        if (!courseRepository.existsById(id)){
+        if (!courseRepository.existsById(id)) {
             throw new CourseNotFoundException("Course not found with id: " + id);
         }
 
         courseRepository.deleteById(id);
+    }
+
+
+    @Transactional
+    public CourseResponse updateCourse(Long id, UpdateCourseRequest updateCourseRequest) {
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() ->
+                        new CourseNotFoundException
+                                ("Course Not Found With Id: " + id));
+
+
+        course.setTitle(updateCourseRequest.getTitle());
+        course.setStartDate(updateCourseRequest.getStartDate());
+        course.setEndDate(updateCourseRequest.getEndDate());
+
+
+        return new CourseResponse(
+                course.getId(),
+                course.getTitle(),
+                course.getCode(),
+                course.getStartDate(),
+                course.getEndDate()
+        );
     }
 
 }
