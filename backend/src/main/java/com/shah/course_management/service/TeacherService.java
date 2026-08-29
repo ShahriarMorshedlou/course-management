@@ -68,11 +68,31 @@ public class TeacherService {
         );
     }
 
+    @Transactional
     public void deleteTeacherById(Long id) {
 
         if (!teacherRepository.existsById(id)) {
             throw new TeacherNotFoundException("Teacher Not Found With Id: " + id);
         }
         teacherRepository.deleteById(id);
+    }
+
+    @Transactional
+    public TeacherResponse updateTeacherById(Long id,TeacherRequest request){
+
+        Teacher teacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher Not Found With Id: " + id));
+
+        teacher.setEmail(request.getEmail());
+        teacher.setFirstName(request.getFirstName());
+        teacher.setLastName(request.getLastName());
+        teacher.setSpecialty(request.getSpecialty());
+
+        return new TeacherResponse(
+                teacher.getFirstName(),
+                teacher.getLastName(),
+                teacher.getEmail(),
+                teacher.getSpecialty()
+        );
     }
 }

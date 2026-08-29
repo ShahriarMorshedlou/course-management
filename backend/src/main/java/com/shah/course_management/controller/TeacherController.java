@@ -72,4 +72,19 @@ public class TeacherController {
                 .noContent()
                 .build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TeacherResponse> updateTeacherById(
+            @PathVariable
+            @Positive
+            Long id,
+            @RequestBody
+            @Valid
+            TeacherRequest request
+    ) {
+        TeacherResponse teacherResponse = teacherService.updateTeacherById(id, request);
+
+        return ResponseEntity
+                .ok(teacherResponse);
+    }
 }
