@@ -73,4 +73,13 @@ public class CourseService {
         ); return courseResponse;
     }
 
+    public void deleteCourseById(Long id){
+
+        if (!courseRepository.existsById(id)){
+            throw new CourseNotFoundException("Course not found with id: " + id);
+        }
+
+        courseRepository.deleteById(id);
+    }
+
 }
