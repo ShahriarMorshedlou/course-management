@@ -76,4 +76,18 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
 
     }
+
+    @ExceptionHandler(TeacherNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTeacherNotFoundException(TeacherNotFoundException foundException) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                404,
+                foundException.getMessage(),
+                null
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
 }

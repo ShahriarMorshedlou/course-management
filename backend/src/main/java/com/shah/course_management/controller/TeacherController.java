@@ -5,12 +5,10 @@ import com.shah.course_management.dto.response.TeacherResponse;
 import com.shah.course_management.service.TeacherService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,8 +39,21 @@ public class TeacherController {
     }
 
 
-    public ResponseEntity<List<TeacherResponse>> getAllTeachers()  {
-        List<TeacherResponse> teacherResponse = teacherService.getAllTeachers() ;
+    @GetMapping
+    public ResponseEntity<List<TeacherResponse>> getAllTeachers() {
+        List<TeacherResponse> teacherResponse = teacherService.getAllTeachers();
+
+        return ResponseEntity
+                .ok(teacherResponse);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TeacherResponse> getTeacherById(
+            @PathVariable
+            @Positive
+            Long id) {
+
+        TeacherResponse teacherResponse = teacherService.getTeacherById(id);
 
         return ResponseEntity
                 .ok(teacherResponse);
