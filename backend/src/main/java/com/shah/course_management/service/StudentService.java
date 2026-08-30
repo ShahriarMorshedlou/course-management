@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -70,10 +71,10 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentResponse updateStudent(Long id, CreateStudentRequest request){
+    public StudentResponse updateStudent(Long id, CreateStudentRequest request) {
 
         Student student = studentRepository.findById(id)
-                .orElseThrow(()-> new StudentNotFoundException("Student Not Found With Id: " + id));
+                .orElseThrow(() -> new StudentNotFoundException("Student Not Found With Id: " + id));
 
         student.setEmail(request.getEmail());
         student.setLastName(request.getLastName());
@@ -84,5 +85,19 @@ public class StudentService {
                 student.getLastName(),
                 student.getFirstName()
         );
+    }
+
+    public List<StudentResponse> searchStudent(String query) {
+
+
+        return studentRepository.findByFirstNameStartingWithIgnoreCase(query)
+                .stream()
+                .map(student -> new StudentResponse(
+                        student.getEmail(),
+                        student.getLastName(),
+                        student.getFirstName()
+
+                )).toList();
+
     }
 }

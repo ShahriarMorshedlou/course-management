@@ -83,4 +83,14 @@ public class StudentController {
                 .body(studentService.updateStudent(id,request));
     }
 
+
+    @GetMapping("/search")
+    public ResponseEntity<List<StudentResponse>> searchStudent(
+            @RequestParam
+            String query
+    ){
+        return ResponseEntity
+                .ok(studentService.searchStudent(query));
+    }
+
 }
