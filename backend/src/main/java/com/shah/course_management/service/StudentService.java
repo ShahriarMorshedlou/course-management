@@ -5,6 +5,7 @@ import com.shah.course_management.dto.request.CreateStudentRequest;
 import com.shah.course_management.dto.response.StudentResponse;
 import com.shah.course_management.exception.StudentNotFoundException;
 import com.shah.course_management.repository.StudentRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,14 +48,23 @@ public class StudentService {
                 )).toList();
     }
 
-    public StudentResponse getStudentById (Long id){
+    public StudentResponse getStudentById(Long id) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(()-> new StudentNotFoundException("Student Not Found With Id: " + id));
+                .orElseThrow(() -> new StudentNotFoundException("Student Not Found With Id: " + id));
 
         return new StudentResponse(
                 student.getEmail(),
                 student.getLastName(),
                 student.getFirstName()
         );
+    }
+
+    @Transactional
+    public void deleteStudentById(Long id) {
+
+        if (!studentRepository.existsById(id)) {
+            throw new StudentNotFoundException("Student Not Found With Id: " + id);
+        }
+        studentRepository.deleteById(id);
     }
 }
