@@ -78,7 +78,7 @@ public class TeacherService {
     }
 
     @Transactional
-    public TeacherResponse updateTeacherById(Long id,TeacherRequest request){
+    public TeacherResponse updateTeacherById(Long id, TeacherRequest request) {
 
         Teacher teacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new TeacherNotFoundException("Teacher Not Found With Id: " + id));
@@ -94,5 +94,18 @@ public class TeacherService {
                 teacher.getEmail(),
                 teacher.getSpecialty()
         );
+    }
+
+    public List<TeacherResponse> searchTeacher(String specialty) {
+
+        return teacherRepository.findTeacherBySpecialtyStartingWithIgnoreCase(specialty)
+                .stream()
+                .map(teacher -> new TeacherResponse(
+                        teacher.getFirstName(),
+                        teacher.getLastName(),
+                        teacher.getEmail(),
+                        teacher.getSpecialty()
+                )).toList();
+
     }
 }

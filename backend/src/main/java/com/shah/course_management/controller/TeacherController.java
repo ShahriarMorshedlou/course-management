@@ -89,4 +89,13 @@ public class TeacherController {
         return ResponseEntity
                 .ok(teacherResponse);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<TeacherResponse>> searchTeacher(
+            @RequestParam
+            String specialty
+    ) {
+        return ResponseEntity
+                .ok(teacherService.searchTeacher(specialty));
+    }
 }
