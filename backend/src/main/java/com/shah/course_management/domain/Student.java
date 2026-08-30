@@ -2,11 +2,14 @@ package com.shah.course_management.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Entity
 @Getter
 @Table(name = "students")
+@NoArgsConstructor
 public class Student {
 
     @Id
@@ -24,6 +27,12 @@ public class Student {
 
     @ManyToMany(mappedBy = "students")
     private List<Course> courses;
+
+    public Student(String email, String lastName, String firstName) {
+        this.email = email;
+        this.lastName = lastName;
+        this.firstName = firstName;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
