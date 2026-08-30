@@ -4,9 +4,11 @@ import com.shah.course_management.domain.Course;
 import com.shah.course_management.dto.request.CreateCourseRequest;
 import com.shah.course_management.dto.request.UpdateCourseRequest;
 import com.shah.course_management.dto.response.CourseResponse;
+import com.shah.course_management.dto.response.StudentResponse;
 import com.shah.course_management.exception.CourseNotFoundException;
 import com.shah.course_management.repository.CourseRepository;
 import jakarta.transaction.Transactional;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -108,5 +110,21 @@ public class CourseService {
                 course.getEndDate()
         );
     }
+
+    public List<CourseResponse> searchCourse(String title) {
+
+        return courseRepository.findCourseByTitleStartingWithIgnoreCase(title)
+                .stream()
+                .map(course -> new CourseResponse(
+                        course.getId(),
+                        course.getTitle(),
+                        course.getCode(),
+                        course.getStartDate(),
+                        course.getEndDate()
+                )).toList();
+
+
+    }
+
 
 }

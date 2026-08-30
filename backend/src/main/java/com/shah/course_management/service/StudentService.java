@@ -6,10 +6,8 @@ import com.shah.course_management.dto.response.StudentResponse;
 import com.shah.course_management.exception.StudentNotFoundException;
 import com.shah.course_management.repository.StudentRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

@@ -3,6 +3,7 @@ package com.shah.course_management.controller;
 import com.shah.course_management.dto.request.CreateCourseRequest;
 import com.shah.course_management.dto.request.UpdateCourseRequest;
 import com.shah.course_management.dto.response.CourseResponse;
+import com.shah.course_management.dto.response.StudentResponse;
 import com.shah.course_management.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -74,4 +75,12 @@ public class CourseController {
                 .ok(courseResponse);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<CourseResponse>> searchCourse(
+            @RequestParam
+            String title
+    ){
+        return ResponseEntity
+                .ok(courseService.searchCourse(title));
+    }
 }

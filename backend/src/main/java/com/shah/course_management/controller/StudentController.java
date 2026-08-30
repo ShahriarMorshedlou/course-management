@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @RestController
@@ -76,11 +75,11 @@ public class StudentController {
             @RequestBody
             @Valid
             CreateStudentRequest request
-    ){
+    ) {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(studentService.updateStudent(id,request));
+                .body(studentService.updateStudent(id, request));
     }
 
 
@@ -88,7 +87,7 @@ public class StudentController {
     public ResponseEntity<List<StudentResponse>> searchStudent(
             @RequestParam
             String query
-    ){
+    ) {
         return ResponseEntity
                 .ok(studentService.searchStudent(query));
     }
