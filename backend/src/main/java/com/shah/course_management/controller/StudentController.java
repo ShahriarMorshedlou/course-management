@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @RestController
@@ -65,6 +66,21 @@ public class StudentController {
         return ResponseEntity
                 .noContent()
                 .build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentResponse> updateStudent(
+            @PathVariable
+            @Positive
+            Long id,
+            @RequestBody
+            @Valid
+            CreateStudentRequest request
+    ){
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(studentService.updateStudent(id,request));
     }
 
 }
