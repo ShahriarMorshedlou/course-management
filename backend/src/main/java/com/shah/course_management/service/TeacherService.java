@@ -33,6 +33,7 @@ public class TeacherService {
         teacherRepository.save(teacher);
 
         return new TeacherResponse(
+                teacher.getId(),
                 teacher.getFirstName(),
                 teacher.getLastName(),
                 teacher.getEmail(),
@@ -46,6 +47,7 @@ public class TeacherService {
         return teacherRepository.findAll()
                 .stream()
                 .map(teacher -> new TeacherResponse(
+                        teacher.getId(),
                         teacher.getFirstName(),
                         teacher.getLastName(),
                         teacher.getEmail(),
@@ -60,6 +62,7 @@ public class TeacherService {
                 .orElseThrow(() -> new TeacherNotFoundException("Teacher Not Found With Id: " + id));
 
         return new TeacherResponse(
+                teacher.getId(),
                 teacher.getFirstName(),
                 teacher.getLastName(),
                 teacher.getEmail(),
@@ -89,6 +92,7 @@ public class TeacherService {
         teacher.setSpecialty(request.getSpecialty());
 
         return new TeacherResponse(
+                teacher.getId(),
                 teacher.getFirstName(),
                 teacher.getLastName(),
                 teacher.getEmail(),
@@ -101,6 +105,7 @@ public class TeacherService {
         return teacherRepository.findTeacherBySpecialtyStartingWithIgnoreCase(specialty)
                 .stream()
                 .map(teacher -> new TeacherResponse(
+                        teacher.getId(),
                         teacher.getFirstName(),
                         teacher.getLastName(),
                         teacher.getEmail(),

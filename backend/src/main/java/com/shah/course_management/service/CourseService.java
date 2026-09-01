@@ -5,6 +5,7 @@ import com.shah.course_management.dto.request.CreateCourseRequest;
 import com.shah.course_management.dto.request.UpdateCourseRequest;
 import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.dto.response.StudentResponse;
+import com.shah.course_management.dto.response.TeacherSummary;
 import com.shah.course_management.exception.CourseNotFoundException;
 import com.shah.course_management.repository.CourseRepository;
 import jakarta.transaction.Transactional;
@@ -35,14 +36,22 @@ public class CourseService {
 
         courseRepository.save(course);
 
-        CourseResponse courseResponse = new CourseResponse(
+        TeacherSummary teacherSummary = null;
+        if (course.getTeacher() != null) {
+            teacherSummary = new TeacherSummary(
+                    course.getTeacher().getFirstName(),
+                    course.getTeacher().getLastName()
+            );
+        }
+
+        return new CourseResponse(
                 course.getId(),
                 course.getTitle(),
                 course.getCode(),
                 course.getStartDate(),
-                course.getEndDate()
+                course.getEndDate(),
+                teacherSummary
         );
-        return courseResponse;
     }
 
     public List<CourseResponse> getAllCourses() {
@@ -50,14 +59,26 @@ public class CourseService {
         List<Course> courses = courseRepository.findAll();
 
         List<CourseResponse> courseResponses = courses.stream()
-                .map(course -> new CourseResponse(
-                        course.getId(),
-                        course.getTitle(),
-                        course.getCode(),
-                        course.getStartDate(),
-                        course.getEndDate()
+                .map(course -> {
 
-                )).toList();
+                    TeacherSummary teacherSummary = null;
+                    if (course.getTeacher() != null) {
+                        teacherSummary = new TeacherSummary(
+                                course.getTeacher().getFirstName(),
+                                course.getTeacher().getLastName()
+                        );
+                    }
+
+                    return new CourseResponse(
+                            course.getId(),
+                            course.getTitle(),
+                            course.getCode(),
+                            course.getStartDate(),
+                            course.getEndDate(),
+                            teacherSummary
+                    );
+                }).toList();
+
 
         return courseResponses;
     }
@@ -67,14 +88,22 @@ public class CourseService {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException("Course not found with id: " + id));
 
-        CourseResponse courseResponse = new CourseResponse(
+        TeacherSummary teacherSummary = null;
+        if (course.getTeacher() != null) {
+            teacherSummary = new TeacherSummary(
+                    course.getTeacher().getFirstName(),
+                    course.getTeacher().getLastName()
+            );
+        }
+
+        return new CourseResponse(
                 course.getId(),
                 course.getTitle(),
                 course.getCode(),
                 course.getStartDate(),
-                course.getEndDate()
+                course.getEndDate(),
+                teacherSummary
         );
-        return courseResponse;
     }
 
     @Transactional
@@ -102,12 +131,21 @@ public class CourseService {
         course.setEndDate(updateCourseRequest.getEndDate());
 
 
+        TeacherSummary teacherSummary = null;
+        if (course.getTeacher() != null) {
+            teacherSummary = new TeacherSummary(
+                    course.getTeacher().getFirstName(),
+                    course.getTeacher().getLastName()
+            );
+        }
+
         return new CourseResponse(
                 course.getId(),
                 course.getTitle(),
                 course.getCode(),
                 course.getStartDate(),
-                course.getEndDate()
+                course.getEndDate(),
+                teacherSummary
         );
     }
 
@@ -115,14 +153,25 @@ public class CourseService {
 
         return courseRepository.findCourseByTitleStartingWithIgnoreCase(title)
                 .stream()
-                .map(course -> new CourseResponse(
-                        course.getId(),
-                        course.getTitle(),
-                        course.getCode(),
-                        course.getStartDate(),
-                        course.getEndDate()
-                )).toList();
+                .map(course -> {
 
+                    TeacherSummary teacherSummary = null;
+                    if (course.getTeacher() != null) {
+                        teacherSummary = new TeacherSummary(
+                                course.getTeacher().getFirstName(),
+                                course.getTeacher().getLastName()
+                        );
+                    }
+
+                    return new CourseResponse(
+                            course.getId(),
+                            course.getTitle(),
+                            course.getCode(),
+                            course.getStartDate(),
+                            course.getEndDate(),
+                            teacherSummary
+                    );
+                }).toList();
 
     }
 
