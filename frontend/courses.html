@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>دوره‌ها | Course Management</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Course Management</a>
+      <div class="navbar-nav">
+        <a class="nav-link active" href="courses.html">دوره‌ها</a>
+        <a class="nav-link" href="teachers.html">اساتید</a>
+        <a class="nav-link" href="students.html">دانشجویان</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3>لیست دوره‌ها</h3>
+      <button class="btn btn-primary" id="addCourseBtn" data-bs-toggle="modal" data-bs-target="#courseModal">
+        افزودن دوره
+      </button>
+    </div>
+
+    <div class="mb-3">
+      <input type="text" class="form-control" id="searchInput" placeholder="جستجو بر اساس عنوان دوره...">
+    </div>
+
+    <!-- جای نمایش خطاها (فعلاً خالی، در مرحله بعد با JS پر می‌شه) -->
+    <div id="errorBox" class="alert alert-danger d-none"></div>
+
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>عنوان دوره</th>
+          <th>کد</th>
+          <th>تاریخ شروع</th>
+          <th>تاریخ پایان</th>
+          <th>استاد</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody id="coursesTableBody">
+        <!-- ردیف‌ها بعداً با JavaScript از روی داده API اضافه می‌شن -->
+        <tr>
+          <td colspan="7" class="text-center text-muted">در حال بارگذاری...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal برای افزودن دوره: فیلدها دقیقاً مطابق CreateCourseRequest -->
+  <div class="modal fade" id="courseModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="courseModalLabel">افزودن دوره</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+
+          <!-- خطاهای اختصاصی این فرم اینجا نشون داده می‌شه -->
+          <div id="formErrorBox" class="alert alert-danger d-none"></div>
+
+          <form id="courseForm">
+            <div class="mb-3">
+              <label class="form-label">عنوان دوره (حداکثر 15 کاراکتر)</label>
+              <input type="text" class="form-control" id="title" maxlength="15" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">کد دوره (حداکثر 5 کاراکتر)</label>
+              <input type="text" class="form-control" id="code" maxlength="5" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">تاریخ شروع</label>
+              <input type="date" class="form-control" id="startDate" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">تاریخ پایان</label>
+              <input type="date" class="form-control" id="endDate" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+          <button type="button" class="btn btn-primary" id="saveCourseBtn">ذخیره</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="js/courses.js"></script>
+</body>
+</html>
