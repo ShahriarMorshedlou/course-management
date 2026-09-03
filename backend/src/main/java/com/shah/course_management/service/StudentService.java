@@ -30,6 +30,7 @@ public class StudentService {
         studentRepository.save(student);
 
         return new StudentResponse(
+                student.getId(),
                 student.getEmail(),
                 student.getLastName(),
                 student.getFirstName()
@@ -42,6 +43,7 @@ public class StudentService {
         return studentRepository.findAll()
                 .stream()
                 .map(student -> new StudentResponse(
+                        student.getId(),
                         student.getEmail(),
                         student.getLastName(),
                         student.getFirstName()
@@ -53,6 +55,7 @@ public class StudentService {
                 .orElseThrow(() -> new StudentNotFoundException("Student Not Found With Id: " + id));
 
         return new StudentResponse(
+                student.getId(),
                 student.getEmail(),
                 student.getLastName(),
                 student.getFirstName()
@@ -79,6 +82,7 @@ public class StudentService {
         student.setFirstName(request.getFirstName());
 
         return new StudentResponse(
+                student.getId(),
                 student.getEmail(),
                 student.getLastName(),
                 student.getFirstName()
@@ -91,6 +95,7 @@ public class StudentService {
         return studentRepository.findByFirstNameStartingWithIgnoreCase(query)
                 .stream()
                 .map(student -> new StudentResponse(
+                        student.getId(),
                         student.getEmail(),
                         student.getLastName(),
                         student.getFirstName()
