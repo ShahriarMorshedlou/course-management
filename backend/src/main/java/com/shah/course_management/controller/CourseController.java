@@ -7,6 +7,8 @@ import com.shah.course_management.dto.response.StudentResponse;
 import com.shah.course_management.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -37,8 +39,8 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseResponse>> getAllCourses() {
-        List<CourseResponse> courseResponses = courseService.getAllCourses();
+    public ResponseEntity<Page<CourseResponse>> getAllCourses(Pageable pageable) {
+        Page<CourseResponse> courseResponses = courseService.getAllCourses(pageable);
 
         return ResponseEntity
                 .ok(courseResponses);
@@ -79,7 +81,7 @@ public class CourseController {
     public ResponseEntity<List<CourseResponse>> searchCourse(
             @RequestParam
             String title
-    ){
+    ) {
         return ResponseEntity
                 .ok(courseService.searchCourse(title));
     }

@@ -12,6 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -74,21 +78,24 @@ public class CourseServiceTest {
         assertEquals(LocalDate.of(2026, 12, 1), result.getEndDate());
     }
 
-
     @Test
     void getAllCourses_shouldReturnCourses() {
 
-        when(courseRepository.findAll())
-                .thenReturn(List.of(course));
+        Pageable pageable = PageRequest.of(0, 10);
 
-        List<CourseResponse> result =
-                courseService.getAllCourses();
+        Page<Course> coursePage =
+                new PageImpl<>(List.of(course), pageable, 1);
 
-        assertEquals(1, result.size());
-        assertEquals("Java Programming", result.get(0).getTitle());
-        assertEquals("JAVA101", result.get(0).getCode());
+        when(courseRepository.findAll(pageable))
+                .thenReturn(coursePage);
+
+        Page<CourseResponse> result =
+                courseService.getAllCourses(pageable);
+
+        assertEquals(1, result.getContent().size());
+        assertEquals("Java Programming", result.getContent().get(0).getTitle());
+        assertEquals("JAVA101", result.getContent().get(0).getCode());
     }
-
 
     @Test
     void getCourseById_shouldReturnCourse() {
