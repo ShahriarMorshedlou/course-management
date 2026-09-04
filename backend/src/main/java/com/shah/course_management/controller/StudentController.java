@@ -5,6 +5,8 @@ import com.shah.course_management.dto.response.StudentResponse;
 import com.shah.course_management.service.StudentService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,10 +41,10 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentResponse>> getAllStudent() {
+    public ResponseEntity<Page<StudentResponse>> getAllStudent(Pageable pageable) {
 
         return ResponseEntity
-                .ok(studentService.getAllStudent());
+                .ok(studentService.getAllStudent(pageable));
     }
 
     @GetMapping("/{id}")

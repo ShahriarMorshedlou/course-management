@@ -6,6 +6,8 @@ import com.shah.course_management.dto.response.StudentResponse;
 import com.shah.course_management.exception.StudentNotFoundException;
 import com.shah.course_management.repository.StudentRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,16 +40,15 @@ public class StudentService {
 
     }
 
-    public List<StudentResponse> getAllStudent() {
+    public Page<StudentResponse> getAllStudent(Pageable pageable) {
 
-        return studentRepository.findAll()
-                .stream()
+        return studentRepository.findAll(pageable)
                 .map(student -> new StudentResponse(
                         student.getId(),
                         student.getEmail(),
                         student.getLastName(),
                         student.getFirstName()
-                )).toList();
+                ));
     }
 
     public StudentResponse getStudentById(Long id) {

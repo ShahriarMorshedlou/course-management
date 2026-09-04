@@ -6,6 +6,8 @@ import com.shah.course_management.service.TeacherService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -42,8 +44,8 @@ public class TeacherController {
 
 
     @GetMapping
-    public ResponseEntity<List<TeacherResponse>> getAllTeachers() {
-        List<TeacherResponse> teacherResponse = teacherService.getAllTeachers();
+    public ResponseEntity<Page<TeacherResponse>> getAllTeachers(Pageable pageable) {
+        Page<TeacherResponse> teacherResponse = teacherService.getAllTeachers(pageable);
 
         return ResponseEntity
                 .ok(teacherResponse);
