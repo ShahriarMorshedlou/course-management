@@ -14,6 +14,10 @@ const searchInput = document.getElementById('searchInput');
 // null یعنی حالت Create؛ یک id یعنی حالت Update برای همون استاد
 let editingTeacherId = null;
 
+// متغیرهای مربوط به Pagination
+let currentPage = 0;
+const pageSize = 10;
+
 addTeacherBtn.addEventListener('click', () => {
   editingTeacherId = null;
   teacherModalLabel.textContent = 'افزودن استاد';
@@ -27,6 +31,17 @@ saveTeacherBtn.addEventListener('click', () => {
   } else {
     updateTeacher(editingTeacherId);
   }
+});
+
+// دکمه‌های صفحه‌بندی
+document.getElementById('prevPageBtn').addEventListener('click', () => {
+  currentPage--;
+  loadTeachers();
+});
+
+document.getElementById('nextPageBtn').addEventListener('click', () => {
+  currentPage++;
+  loadTeachers();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -59,23 +74,32 @@ teachersTableBody.addEventListener('click', (event) => {
   }
 });
 
-// ---------- GET /teacher : گرفتن لیست همه اساتید ----------
+// ---------- GET /teacher?page=..&size=.. : گرفتن یک صفحه از اساتید ----------
 function loadTeachers() {
   hideListError();
 
-  fetch(`${BASE_URL}/teacher`, { method: 'GET' })
+  fetch(`${BASE_URL}/teacher?page=${currentPage}&size=${pageSize}`, { method: 'GET' })
     .then((response) => {
       if (!response.ok) {
         throw new Error(`خطای سرور: ${response.status}`);
       }
       return response.json();
     })
-    .then((teachers) => {
-      renderTeachers(teachers);
+    .then((pageData) => {
+      renderTeachers(pageData.content);
+      renderPagination(pageData);
     })
     .catch((error) => {
       showListError(error.message);
     });
+}
+
+function renderPagination(pageData) {
+  document.getElementById('pageInfo').textContent =
+    `صفحه ${pageData.number + 1} از ${pageData.totalPages} (مجموع ${pageData.totalElements} استاد)`;
+
+  document.getElementById('prevPageBtn').disabled = pageData.first;
+  document.getElementById('nextPageBtn').disabled = pageData.last;
 }
 
 // ---------- GET /teacher/search?specialty=... : جستجو ----------
@@ -152,6 +176,7 @@ function createTeacher() {
       console.log('استاد ساخته شد:', createdTeacher);
       teacherModal.hide();
       document.getElementById('teacherForm').reset();
+      currentPage = 0;
       loadTeachers();
     })
     .catch((error) => {

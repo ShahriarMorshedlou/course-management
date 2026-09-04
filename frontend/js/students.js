@@ -14,6 +14,10 @@ const searchInput = document.getElementById('searchInput');
 // null یعنی حالت Create؛ یک id یعنی حالت Update برای همون دانشجو
 let editingStudentId = null;
 
+// متغیرهای مربوط به Pagination
+let currentPage = 0;
+const pageSize = 10;
+
 addStudentBtn.addEventListener('click', () => {
   editingStudentId = null;
   studentModalLabel.textContent = 'افزودن دانشجو';
@@ -27,6 +31,17 @@ saveStudentBtn.addEventListener('click', () => {
   } else {
     updateStudent(editingStudentId);
   }
+});
+
+// دکمه‌های صفحه‌بندی
+document.getElementById('prevPageBtn').addEventListener('click', () => {
+  currentPage--;
+  loadStudents();
+});
+
+document.getElementById('nextPageBtn').addEventListener('click', () => {
+  currentPage++;
+  loadStudents();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -59,23 +74,32 @@ studentsTableBody.addEventListener('click', (event) => {
   }
 });
 
-// ---------- GET /student : گرفتن لیست همه دانشجویان ----------
+// ---------- GET /student?page=..&size=.. : گرفتن یک صفحه از دانشجویان ----------
 function loadStudents() {
   hideListError();
 
-  fetch(`${BASE_URL}/student`, { method: 'GET' })
+  fetch(`${BASE_URL}/student?page=${currentPage}&size=${pageSize}`, { method: 'GET' })
     .then((response) => {
       if (!response.ok) {
         throw new Error(`خطای سرور: ${response.status}`);
       }
       return response.json();
     })
-    .then((students) => {
-      renderStudents(students);
+    .then((pageData) => {
+      renderStudents(pageData.content);
+      renderPagination(pageData);
     })
     .catch((error) => {
       showListError(error.message);
     });
+}
+
+function renderPagination(pageData) {
+  document.getElementById('pageInfo').textContent =
+    `صفحه ${pageData.number + 1} از ${pageData.totalPages} (مجموع ${pageData.totalElements} دانشجو)`;
+
+  document.getElementById('prevPageBtn').disabled = pageData.first;
+  document.getElementById('nextPageBtn').disabled = pageData.last;
 }
 
 // ---------- GET /student/search?query=... : جستجو بر اساس firstName ----------
@@ -150,6 +174,7 @@ function createStudent() {
       console.log('دانشجو ساخته شد:', createdStudent);
       studentModal.hide();
       document.getElementById('studentForm').reset();
+      currentPage = 0;
       loadStudents();
     })
     .catch((error) => {

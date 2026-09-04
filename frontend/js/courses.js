@@ -10,11 +10,27 @@ const courseModalLabel = document.getElementById('courseModalLabel');
 const courseModal = new bootstrap.Modal(courseModalEl);
 const coursesTableBody = document.getElementById('coursesTableBody');
 const codeInput = document.getElementById('code');
+const searchInput = document.getElementById('searchInput');
 
 // این متغیر «حافظه‌ی حالت فعلی Modal» هست:
 // اگه null باشه یعنی داریم دوره‌ی جدید می‌سازیم (Create)
 // اگه یک عدد باشه (id یک دوره) یعنی داریم همون دوره رو ویرایش می‌کنیم (Update)
 let editingCourseId = null;
+
+// متغیرهای مربوط به Pagination
+let currentPage = 0;
+const pageSize = 10;
+
+// هر بار که کاربر داخل فیلد جستجو چیزی تایپ می‌کنه، این کد اجرا می‌شه
+searchInput.addEventListener('input', () => {
+  const title = searchInput.value.trim(); // trim() یعنی فاصله‌های اضافه‌ی ابتدا/انتها رو حذف کن
+
+  if (title === '') {
+    loadCourses(); // اگه فیلد خالی شد، برگرد به حالت "نمایش همه"
+  } else {
+    searchCourses(title);
+  }
+});
 
 // وقتی دکمه "افزودن دوره" کلیک می‌شه، مطمئن می‌شیم فرم در حالت Create ریست شده
 addCourseBtn.addEventListener('click', () => {
@@ -33,6 +49,17 @@ saveCourseBtn.addEventListener('click', () => {
   } else {
     updateCourse(editingCourseId);
   }
+});
+
+// دکمه‌های صفحه‌بندی
+document.getElementById('prevPageBtn').addEventListener('click', () => {
+  currentPage--;
+  loadCourses();
+});
+
+document.getElementById('nextPageBtn').addEventListener('click', () => {
+  currentPage++;
+  loadCourses();
 });
 
 // وقتی خود صفحه کامل لود شد، لیست دوره‌ها رو از API بگیر
@@ -58,26 +85,35 @@ coursesTableBody.addEventListener('click', (event) => {
   }
 });
 
-// ---------- GET /course : گرفتن لیست همه دوره‌ها ----------
+// ---------- GET /course?page=..&size=.. : گرفتن یک صفحه از دوره‌ها ----------
 function loadCourses() {
   hideListError();
 
-  fetch(`${BASE_URL}/course`, {
+  fetch(`${BASE_URL}/course?page=${currentPage}&size=${pageSize}`, {
     method: 'GET'
-    // نه Body لازمه، نه Content-Type - چون چیزی نمی‌فرستیم
   })
     .then((response) => {
       if (!response.ok) {
         throw new Error(`خطای سرور: ${response.status}`);
       }
-      return response.json(); // اینجا یک آرایه از CourseResponse برمی‌گرده: [{id, title, code, startDate, endDate}, ...]
+      return response.json(); // الان یک Object برمی‌گرده: {content: [...], totalPages, totalElements, number, first, last}
     })
-    .then((courses) => {
-      renderCourses(courses);
+    .then((pageData) => {
+      renderCourses(pageData.content); // آرایه‌ی واقعی دوره‌ها داخل content هست
+      renderPagination(pageData);
     })
     .catch((error) => {
       showListError(error.message);
     });
+}
+
+// این تابع فقط اطلاعات صفحه‌بندی (متن "صفحه X از Y" و فعال/غیرفعال بودن دکمه‌ها) رو آپدیت می‌کنه
+function renderPagination(pageData) {
+  document.getElementById('pageInfo').textContent =
+    `صفحه ${pageData.number + 1} از ${pageData.totalPages} (مجموع ${pageData.totalElements} دوره)`;
+
+  document.getElementById('prevPageBtn').disabled = pageData.first;
+  document.getElementById('nextPageBtn').disabled = pageData.last;
 }
 
 // این تابع فقط UI رو بر اساس آرایه‌ای که از API گرفتیم می‌سازه (هیچ ارتباطی با شبکه نداره)
@@ -205,6 +241,29 @@ function deleteCourse(id) {
     });
 }
 
+// ---------- GET /course/search?title=... : جستجوی دوره بر اساس عنوان ----------
+function searchCourses(title) {
+  hideListError();
+
+  // encodeURIComponent مقدار title رو برای استفاده امن در URL آماده می‌کنه
+  // (مثلاً اگه کاربر فاصله یا کاراکتر خاص تایپ کنه، به فرمت درست تبدیل می‌شه)
+  fetch(`${BASE_URL}/course/search?title=${encodeURIComponent(title)}`, {
+    method: 'GET'
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`خطای سرور: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((courses) => {
+      renderCourses(courses); // همون تابع رندر قبلی رو دوباره استفاده می‌کنیم، چون خروجی دقیقاً همون شکل CourseResponse[] رو داره
+    })
+    .catch((error) => {
+      showListError(error.message);
+    });
+}
+
 function showListError(message) {
   errorBox.textContent = message;
   errorBox.classList.remove('d-none');
@@ -249,6 +308,7 @@ function createCourse() {
       console.log('دوره ساخته شد:', createdCourse);
       courseModal.hide();
       document.getElementById('courseForm').reset();
+      currentPage = 0; // برگرد به صفحه اول تا دوره تازه ساخته‌شده دیده بشه
       loadCourses(); // جدول رو دوباره از سرور می‌گیریم تا رکورد جدید هم توش باشه
     })
     .catch((error) => {
