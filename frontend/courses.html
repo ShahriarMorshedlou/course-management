@@ -100,7 +100,53 @@
     </div>
   </div>
 
+  <!-- Modal مشاهده و ثبت‌نام دانشجویان یک دوره -->
+  <div class="modal fade" id="courseStudentsModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">دانشجویان این دوره</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="enrollErrorBox" class="alert alert-danger d-none"></div>
+
+          <ul id="enrolledStudentsList" class="list-group mb-3"></ul>
+
+          <hr>
+          <label class="form-label">ثبت‌نام دانشجوی جدید:</label>
+          <div class="d-flex gap-2">
+            <select id="studentSelectDropdown" class="form-select"></select>
+            <button class="btn btn-primary" id="enrollStudentBtn">افزودن</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal اختصاص استاد به دوره -->
+  <div class="modal fade" id="assignTeacherModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">تعیین استاد این دوره</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="assignErrorBox" class="alert alert-danger d-none"></div>
+          <label class="form-label">انتخاب استاد:</label>
+          <select id="teacherSelectDropdown" class="form-select"></select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+          <button class="btn btn-primary" id="assignTeacherBtn">ثبت</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="js/courses.js"></script>
+  <script src="js/relations.js"></script>
 </body>
 </html>

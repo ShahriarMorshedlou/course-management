@@ -142,6 +142,7 @@ function renderStudents(students) {
       <td>
         <button class="btn btn-sm btn-warning btn-edit" data-id="${student.id}">ویرایش</button>
         <button class="btn btn-sm btn-danger btn-delete" data-id="${student.id}">حذف</button>
+        <button class="btn btn-sm btn-info btn-view-courses" data-id="${student.id}">دوره‌ها</button>
       </td>
     `;
     studentsTableBody.appendChild(row);

@@ -91,7 +91,23 @@
     </div>
   </div>
 
+  <!-- Modal مشاهده دوره‌های این دانشجو (فقط نمایش) -->
+  <div class="modal fade" id="relatedCoursesModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="relatedCoursesModalLabel">دوره‌ها</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <ul id="relatedCoursesList" class="list-group"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="js/students.js"></script>
+  <script src="js/relations.js"></script>
 </body>
 </html>

@@ -143,6 +143,7 @@ function renderTeachers(teachers) {
       <td>
         <button class="btn btn-sm btn-warning btn-edit" data-id="${teacher.id}">ویرایش</button>
         <button class="btn btn-sm btn-danger btn-delete" data-id="${teacher.id}">حذف</button>
+        <button class="btn btn-sm btn-info btn-view-courses" data-id="${teacher.id}">دوره‌ها</button>
       </td>
     `;
     teachersTableBody.appendChild(row);
