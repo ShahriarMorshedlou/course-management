@@ -2,15 +2,19 @@ package com.shah.course_management.service;
 
 import com.shah.course_management.domain.Course;
 import com.shah.course_management.domain.Student;
+import com.shah.course_management.domain.Teacher;
 import com.shah.course_management.dto.request.CreateCourseRequest;
 import com.shah.course_management.dto.request.UpdateCourseRequest;
 import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.dto.response.StudentResponse;
+import com.shah.course_management.dto.response.TeacherResponse;
 import com.shah.course_management.dto.response.TeacherSummary;
 import com.shah.course_management.exception.CourseNotFoundException;
 import com.shah.course_management.exception.StudentNotFoundException;
+import com.shah.course_management.exception.TeacherNotFoundException;
 import com.shah.course_management.repository.CourseRepository;
 import com.shah.course_management.repository.StudentRepository;
+import com.shah.course_management.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
 import org.jspecify.annotations.Nullable;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +29,13 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
 
 
-    public CourseService(CourseRepository courseRepository, StudentRepository studentRepository) {
+    public CourseService(CourseRepository courseRepository, StudentRepository studentRepository,TeacherRepository teacherRepository) {
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
+        this.teacherRepository = teacherRepository;
     }
 
     @Transactional
@@ -214,6 +220,21 @@ public class CourseService {
 
 
         course.getStudents().add(student);
+
+    }
+
+    @Transactional
+    public void enrollTeacherInCourse(Long courseId, Long teacherId){
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(()-> new CourseNotFoundException("course not found exception with id: " + courseId));
+
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(()-> new TeacherNotFoundException("teacher not found with id: " + teacherId));
+
+
+        course.setTeacher(teacher);
+
 
     }
 }

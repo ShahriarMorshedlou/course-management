@@ -108,4 +108,18 @@ public class CourseController {
                 .noContent()
                 .build();
     }
+
+    @PostMapping("/{courseId}/teacher/{teacherId}")
+    public ResponseEntity <Void> enrollTeacherInCourse(
+            @PathVariable
+            Long courseId,
+            @PathVariable
+            Long teacherId
+    ){
+
+        courseService.enrollTeacherInCourse(courseId,teacherId);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }
