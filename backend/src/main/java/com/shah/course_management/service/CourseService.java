@@ -1,6 +1,7 @@
 package com.shah.course_management.service;
 
 import com.shah.course_management.domain.Course;
+import com.shah.course_management.domain.Student;
 import com.shah.course_management.dto.request.CreateCourseRequest;
 import com.shah.course_management.dto.request.UpdateCourseRequest;
 import com.shah.course_management.dto.response.CourseResponse;
@@ -175,5 +176,20 @@ public class CourseService {
 
     }
 
+    public List<StudentResponse> getStudentsByCourseId(Long courseId) {
 
+
+        List<Student> students =
+                courseRepository.findStudentsByCourseId(courseId);
+
+        return students.stream()
+                .map(student -> new StudentResponse(
+                        student.getId(),
+                        student.getEmail(),
+                        student.getLastName(),
+                        student.getFirstName()
+                ))
+                .toList();
+
+    }
 }

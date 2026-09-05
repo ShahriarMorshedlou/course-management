@@ -83,4 +83,15 @@ public class CourseController {
         return ResponseEntity
                 .ok(courseService.searchCourse(title));
     }
+
+
+    @GetMapping("/{courseId}/students")
+    public ResponseEntity<List<StudentResponse>> getStudentsByCourseId (
+            @PathVariable
+            Long courseId
+    ){
+        return ResponseEntity.ok(
+                courseService.getStudentsByCourseId(courseId)
+        );
+    }
 }
