@@ -17,6 +17,8 @@ import com.shah.course_management.repository.StudentRepository;
 import com.shah.course_management.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,11 +71,11 @@ public class CourseService {
         );
     }
 
-    public List<CourseResponse> getAllCourses() {
+    public Page<CourseResponse> getAllCourses(Pageable pageable) {
 
-        List<Course> courses = courseRepository.findAll();
+        Page<Course> courses = courseRepository.findAll(pageable);
 
-        List<CourseResponse> courseResponses = courses.stream()
+        return courses
                 .map(course -> {
 
                     TeacherSummary teacherSummary = null;
@@ -92,10 +94,7 @@ public class CourseService {
                             course.getEndDate(),
                             teacherSummary
                     );
-                }).toList();
-
-
-        return courseResponses;
+                });
     }
 
     public CourseResponse getCourseById(Long id) {

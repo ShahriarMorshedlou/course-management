@@ -9,6 +9,8 @@ import com.shah.course_management.dto.response.TeacherSummary;
 import com.shah.course_management.exception.TeacherNotFoundException;
 import com.shah.course_management.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,19 +46,16 @@ public class TeacherService {
         );
     }
 
-    public List<TeacherResponse> getAllTeachers() {
+    public Page<TeacherResponse> getAllTeachers(Pageable pageable) {
 
-
-        return teacherRepository.findAll()
-                .stream()
+        return teacherRepository.findAll(pageable)
                 .map(teacher -> new TeacherResponse(
                         teacher.getId(),
                         teacher.getFirstName(),
                         teacher.getLastName(),
                         teacher.getEmail(),
                         teacher.getSpecialty()
-                )).toList();
-
+                ));
     }
 
     public TeacherResponse getTeacherById(Long id) {
