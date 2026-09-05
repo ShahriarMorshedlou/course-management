@@ -62,7 +62,7 @@ The backend follows a layered architecture:
 - Service Layer — Contains business logic and application rules.
 - Repository Layer — Handles database access through Spring Data JPA.
 - Entity Layer — Represents the domain models and their relationships.
-- 
+
 ## Database & JPA Relationships
 
 The project uses PostgreSQL as its relational database and JPA/Hibernate for object-relational mapping.
