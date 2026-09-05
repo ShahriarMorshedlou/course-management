@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -38,7 +40,7 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private List<Student> students;
+    private Set<Student> students = new HashSet<>();
 
     public Course(String code, String title, LocalDate startDate, LocalDate endDate) {
         this.code = code;
@@ -65,5 +67,9 @@ public class Course {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 }

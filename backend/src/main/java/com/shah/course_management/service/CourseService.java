@@ -8,10 +8,15 @@ import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.dto.response.StudentResponse;
 import com.shah.course_management.dto.response.TeacherSummary;
 import com.shah.course_management.exception.CourseNotFoundException;
+import com.shah.course_management.exception.StudentNotFoundException;
 import com.shah.course_management.repository.CourseRepository;
+import com.shah.course_management.repository.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.jspecify.annotations.Nullable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -19,9 +24,12 @@ import java.util.List;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final StudentRepository studentRepository;
 
-    public CourseService(CourseRepository courseRepository) {
+
+    public CourseService(CourseRepository courseRepository, StudentRepository studentRepository) {
         this.courseRepository = courseRepository;
+        this.studentRepository = studentRepository;
     }
 
     @Transactional
@@ -190,6 +198,22 @@ public class CourseService {
                         student.getFirstName()
                 ))
                 .toList();
+
+    }
+
+
+    @Transactional
+    public void enrollStudentInCourse(Long courseId, Long studentId) {
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException("course not found with id: " + courseId));
+
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException("student not found with id: " + studentId));
+
+
+        course.getStudents().add(student);
 
     }
 }

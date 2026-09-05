@@ -94,4 +94,18 @@ public class CourseController {
                 courseService.getStudentsByCourseId(courseId)
         );
     }
+
+    @PostMapping("/{courseId}/{studentId}")
+    public ResponseEntity<Void> enrollStudentInCourse(
+            @PathVariable
+            Long courseId,
+            @PathVariable
+            Long studentId
+    ){
+        courseService.enrollStudentInCourse(courseId,studentId);
+
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }
