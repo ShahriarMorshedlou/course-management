@@ -1,8 +1,11 @@
 package com.shah.course_management.service;
 
+import com.shah.course_management.domain.Course;
 import com.shah.course_management.domain.Teacher;
 import com.shah.course_management.dto.request.TeacherRequest;
+import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.dto.response.TeacherResponse;
+import com.shah.course_management.dto.response.TeacherSummary;
 import com.shah.course_management.exception.TeacherNotFoundException;
 import com.shah.course_management.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
@@ -111,6 +114,35 @@ public class TeacherService {
                         teacher.getEmail(),
                         teacher.getSpecialty()
                 )).toList();
+
+    }
+
+    public List<CourseResponse> getCoursesByTeacherId(Long teacherId) {
+
+        List<CourseResponse> courses = teacherRepository.getCoursesByTeacherId(teacherId)
+                .stream()
+                .map(course -> {
+
+
+                    TeacherSummary teacherSummary = null;
+                    if (course.getTeacher() != null) {
+                        teacherSummary = new TeacherSummary(
+                                course.getTeacher().getFirstName(),
+                                course.getTeacher().getLastName()
+                        );
+                    }
+
+                    return new CourseResponse(
+                            course.getId(),
+                            course.getTitle(),
+                            course.getCode(),
+                            course.getStartDate(),
+                            course.getEndDate(),
+                            teacherSummary
+                    );
+
+                }).toList();
+        return courses;
 
     }
 }

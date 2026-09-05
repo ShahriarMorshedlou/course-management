@@ -1,6 +1,7 @@
 package com.shah.course_management.controller;
 
 import com.shah.course_management.dto.request.TeacherRequest;
+import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.dto.response.TeacherResponse;
 import com.shah.course_management.service.TeacherService;
 import jakarta.transaction.Transactional;
@@ -97,5 +98,14 @@ public class TeacherController {
     ) {
         return ResponseEntity
                 .ok(teacherService.searchTeacher(specialty));
+    }
+
+    @GetMapping("/{teacherId}/courses")
+    public ResponseEntity<List<CourseResponse>> getCoursesByTeacherId(
+            @PathVariable
+            Long teacherId
+    ) {
+        return ResponseEntity
+                .ok(teacherService.getCoursesByTeacherId(teacherId));
     }
 }
