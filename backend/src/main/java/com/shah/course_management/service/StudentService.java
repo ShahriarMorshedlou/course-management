@@ -1,8 +1,11 @@
 package com.shah.course_management.service;
 
+import com.shah.course_management.domain.Course;
 import com.shah.course_management.domain.Student;
 import com.shah.course_management.dto.request.CreateStudentRequest;
+import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.dto.response.StudentResponse;
+import com.shah.course_management.dto.response.TeacherSummary;
 import com.shah.course_management.exception.StudentNotFoundException;
 import com.shah.course_management.repository.StudentRepository;
 import jakarta.transaction.Transactional;
@@ -103,4 +106,32 @@ public class StudentService {
                 )).toList();
 
     }
+
+    public List<CourseResponse> getCoursesByStudentId(Long studentId) {
+
+            return studentRepository.findCourseByStudentId(studentId)
+                    .stream()
+                    .map(course -> {
+
+                        TeacherSummary teacherSummary = null;
+
+                        if (course.getTeacher() != null) {
+                            teacherSummary = new TeacherSummary(
+                                    course.getTeacher().getFirstName(),
+                                    course.getTeacher().getLastName()
+                            );
+                        }
+
+                        return new CourseResponse(
+                                course.getId(),
+                                course.getTitle(),
+                                course.getCode(),
+                                course.getStartDate(),
+                                course.getEndDate(),
+                                teacherSummary
+                        );
+
+                    })
+                    .toList();
+        }
 }

@@ -1,6 +1,7 @@
 package com.shah.course_management.controller;
 
 import com.shah.course_management.dto.request.CreateStudentRequest;
+import com.shah.course_management.dto.response.CourseResponse;
 import com.shah.course_management.dto.response.StudentResponse;
 import com.shah.course_management.service.StudentService;
 import jakarta.validation.Valid;
@@ -91,6 +92,15 @@ public class StudentController {
     ) {
         return ResponseEntity
                 .ok(studentService.searchStudent(query));
+    }
+
+    @GetMapping("/{studentId}/courses")
+    public ResponseEntity<List<CourseResponse>> getCoursesByStudentId(
+            @PathVariable
+            Long studentId
+    ){
+        return ResponseEntity
+                .ok(studentService.getCoursesByStudentId(studentId));
     }
 
 }
